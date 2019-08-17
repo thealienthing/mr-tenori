@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-
 class NoteBox extends React.Component {
   constructor(props) {
     super(props);
@@ -35,18 +34,15 @@ class GridColumn extends React.Component {
   }
 
   render() {
+    let noteBoxArray = [];
+    for(var i = 16; i > 0; i--) {
+      noteBoxArray.push(<td>{this.renderNoteBox(i)}</td>);
+    }
     return (
       <div className="GridColumn">
         <tr>
           <div class="trDiv">
-          <td>{this.renderNoteBox(8)}</td>
-          <td>{this.renderNoteBox(7)}</td>
-          <td>{this.renderNoteBox(6)}</td>
-          <td>{this.renderNoteBox(5)}</td>
-          <td>{this.renderNoteBox(4)}</td>
-          <td>{this.renderNoteBox(3)}</td>
-          <td>{this.renderNoteBox(2)}</td>
-          <td>{this.renderNoteBox(1)}</td>
+            {noteBoxArray}
           </div>
         </tr>
       </div>
@@ -57,17 +53,14 @@ class GridColumn extends React.Component {
 class Grid extends React.Component {
 
   render() {
+    let gridColumnArray = [];
+    for(var i = 16; i > 0; i--) {
+      gridColumnArray.push(<GridColumn />);
+    }
     return (
       <div className="Grid">
         <table>
-          <GridColumn />
-          <GridColumn />
-          <GridColumn />
-          <GridColumn />
-          <GridColumn />
-          <GridColumn />
-          <GridColumn />
-          <GridColumn />
+          {gridColumnArray}
         </table>
       </div>
     );
