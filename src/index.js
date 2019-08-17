@@ -15,7 +15,8 @@ class NoteBox extends React.Component {
     return (
       <div
         className="square"
-        onClick={this.handleClick.bind(this)}>
+        onClick={this.handleClick.bind(this)}
+      >
         {this.state.value}
       </div>
     );
@@ -30,22 +31,18 @@ class NoteBox extends React.Component {
 
 class GridColumn extends React.Component {
   renderNoteBox(number) {
-    return <NoteBox index={number}/>
+    return <NoteBox key={number} index={number}/>
   }
 
   render() {
     let noteBoxArray = [];
     for(var i = 16; i > 0; i--) {
-      noteBoxArray.push(<td>{this.renderNoteBox(i)}</td>);
+      noteBoxArray.push(<td key={i}>{this.renderNoteBox(i)}</td>);
     }
     return (
-      <div className="GridColumn">
-        <tr>
-          <div class="trDiv">
+        <tr className="GridColumn">
             {noteBoxArray}
-          </div>
         </tr>
-      </div>
     );
   }
 }
@@ -55,12 +52,14 @@ class Grid extends React.Component {
   render() {
     let gridColumnArray = [];
     for(var i = 16; i > 0; i--) {
-      gridColumnArray.push(<GridColumn />);
+      gridColumnArray.push(<GridColumn key={i}/>);
     }
     return (
       <div className="Grid">
         <table>
-          {gridColumnArray}
+          <tbody>
+            {gridColumnArray}
+          </tbody>
         </table>
       </div>
     );
