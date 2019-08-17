@@ -7,7 +7,8 @@ class NoteBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: null,
+      value: this.props.value,
+      index: this.props.index,
     };
   }
 
@@ -15,16 +16,22 @@ class NoteBox extends React.Component {
     return (
       <div
         className="square"
-        onClick={() => this.setState({value: "X"})}>
+        onClick={this.handleClick.bind(this)}>
         {this.state.value}
       </div>
     );
   }
+
+  handleClick(){
+    return this.setState({
+      value: this.props.index,
+    })
+  }
 }
 
 class GridColumn extends React.Component {
-  renderNoteBox() {
-    return <NoteBox Value="X"/>
+  renderNoteBox(number) {
+    return <NoteBox index={number}/>
   }
 
   render() {
@@ -32,14 +39,14 @@ class GridColumn extends React.Component {
       <div className="GridColumn">
         <tr>
           <div class="trDiv">
-          <td>{this.renderNoteBox()}</td>
-          <td>{this.renderNoteBox()}</td>
-          <td>{this.renderNoteBox()}</td>
-          <td>{this.renderNoteBox()}</td>
-          <td>{this.renderNoteBox()}</td>
-          <td>{this.renderNoteBox()}</td>
-          <td>{this.renderNoteBox()}</td>
-          <td>{this.renderNoteBox()}</td>
+          <td>{this.renderNoteBox(8)}</td>
+          <td>{this.renderNoteBox(7)}</td>
+          <td>{this.renderNoteBox(6)}</td>
+          <td>{this.renderNoteBox(5)}</td>
+          <td>{this.renderNoteBox(4)}</td>
+          <td>{this.renderNoteBox(3)}</td>
+          <td>{this.renderNoteBox(2)}</td>
+          <td>{this.renderNoteBox(1)}</td>
           </div>
         </tr>
       </div>

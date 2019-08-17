@@ -19,7 +19,8 @@ var NoteBox = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (NoteBox.__proto__ || Object.getPrototypeOf(NoteBox)).call(this, props));
 
     _this.state = {
-      value: null
+      value: _this.props.value,
+      index: _this.props.index
     };
     return _this;
   }
@@ -27,43 +28,46 @@ var NoteBox = function (_React$Component) {
   _createClass(NoteBox, [{
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       return React.createElement(
         'div',
         {
           className: 'square',
-          onClick: function onClick() {
-            return _this2.setState({ value: "X" });
-          } },
+          onClick: this.handleClick.bind(this) },
         this.state.value
       );
+    }
+  }, {
+    key: 'handleClick',
+    value: function handleClick() {
+      return this.setState({
+        value: this.props.index
+      });
     }
   }]);
 
   return NoteBox;
 }(React.Component);
 
-var GridRow = function (_React$Component2) {
-  _inherits(GridRow, _React$Component2);
+var GridColumn = function (_React$Component2) {
+  _inherits(GridColumn, _React$Component2);
 
-  function GridRow() {
-    _classCallCheck(this, GridRow);
+  function GridColumn() {
+    _classCallCheck(this, GridColumn);
 
-    return _possibleConstructorReturn(this, (GridRow.__proto__ || Object.getPrototypeOf(GridRow)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (GridColumn.__proto__ || Object.getPrototypeOf(GridColumn)).apply(this, arguments));
   }
 
-  _createClass(GridRow, [{
+  _createClass(GridColumn, [{
     key: 'renderNoteBox',
-    value: function renderNoteBox() {
-      return React.createElement(NoteBox, { Value: 'X' });
+    value: function renderNoteBox(number) {
+      return React.createElement(NoteBox, { index: number });
     }
   }, {
     key: 'render',
     value: function render() {
       return React.createElement(
         'div',
-        { className: 'GridRow' },
+        { className: 'GridColumn' },
         React.createElement(
           'tr',
           null,
@@ -73,42 +77,42 @@ var GridRow = function (_React$Component2) {
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(8)
             ),
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(7)
             ),
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(6)
             ),
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(5)
             ),
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(4)
             ),
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(3)
             ),
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(2)
             ),
             React.createElement(
               'td',
               null,
-              this.renderNoteBox()
+              this.renderNoteBox(1)
             )
           )
         )
@@ -116,7 +120,7 @@ var GridRow = function (_React$Component2) {
     }
   }]);
 
-  return GridRow;
+  return GridColumn;
 }(React.Component);
 
 var Grid = function (_React$Component3) {
@@ -137,14 +141,14 @@ var Grid = function (_React$Component3) {
         React.createElement(
           'table',
           null,
-          React.createElement(GridRow, null),
-          React.createElement(GridRow, null),
-          React.createElement(GridRow, null),
-          React.createElement(GridRow, null),
-          React.createElement(GridRow, null),
-          React.createElement(GridRow, null),
-          React.createElement(GridRow, null),
-          React.createElement(GridRow, null)
+          React.createElement(GridColumn, null),
+          React.createElement(GridColumn, null),
+          React.createElement(GridColumn, null),
+          React.createElement(GridColumn, null),
+          React.createElement(GridColumn, null),
+          React.createElement(GridColumn, null),
+          React.createElement(GridColumn, null),
+          React.createElement(GridColumn, null)
         )
       );
     }
