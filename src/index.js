@@ -22,14 +22,14 @@ class NoteBox extends React.Component {
   }
 }
 
-class GridRow extends React.Component {
+class GridColumn extends React.Component {
   renderNoteBox() {
     return <NoteBox Value="X"/>
   }
 
   render() {
     return (
-      <div className="GridRow">
+      <div className="GridColumn">
         <tr>
           <div class="trDiv">
           <td>{this.renderNoteBox()}</td>
@@ -49,19 +49,18 @@ class GridRow extends React.Component {
 
 class Grid extends React.Component {
 
-
   render() {
     return (
       <div className="Grid">
         <table>
-          <GridRow />
-          <GridRow />
-          <GridRow />
-          <GridRow />
-          <GridRow />
-          <GridRow />
-          <GridRow />
-          <GridRow />
+          <GridColumn />
+          <GridColumn />
+          <GridColumn />
+          <GridColumn />
+          <GridColumn />
+          <GridColumn />
+          <GridColumn />
+          <GridColumn />
         </table>
       </div>
     );
