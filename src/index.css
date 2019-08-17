@@ -3,7 +3,7 @@ body {
   margin: 20px;
 }
 
-.GridColumn .trDiv td {
+.GridColumn td {
   background-color: blue;
   display: block;
   margin-bottom: 5px;
