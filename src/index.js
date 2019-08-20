@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Button from './Button';
+import RawStrength from './RawStrength.js';
 
 
 class NoteBox extends React.Component {
@@ -59,6 +60,7 @@ class Grid extends React.Component {
     return (
       <div className="Grid">
         <Button />
+        <RawStrength />
         <table>
           <tbody>
             {gridColumnArray}
