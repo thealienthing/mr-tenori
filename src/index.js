@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Button from './Button';
+
 
 class NoteBox extends React.Component {
   constructor(props) {
@@ -56,6 +58,7 @@ class Grid extends React.Component {
     }
     return (
       <div className="Grid">
+        <Button />
         <table>
           <tbody>
             {gridColumnArray}
@@ -67,6 +70,6 @@ class Grid extends React.Component {
 }
 
 ReactDOM.render(
-  <Grid />,
+  <Grid id='grid'/>,
   document.getElementById('test')
 );
