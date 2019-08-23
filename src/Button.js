@@ -30,6 +30,7 @@ var seq = new Tone.Sequence(function(time, index){
 //subdivisions are given as subarrays
 }, [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]).start(0);
 
+
 class Button extends Component {
   render() {
     return(
