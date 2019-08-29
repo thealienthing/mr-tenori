@@ -3,6 +3,42 @@ body {
   margin: 20px;
 }
 
+#grid {
+  background: #333;
+  padding: 10px;
+  display: inline-block;
+}
+
+#grid div.gridColumn {
+  display:inline-block;
+}
+
+#grid div.gridColumn > div {
+  width:24px;
+  height:24px;
+  border:1px solid #666;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 3px 2px;
+  background-color: #555;
+}
+
+#grid div.gridColumn > div:hover {
+  background-color:#777;
+}
+
+#grid div.gridColumn > div[data-active="true"] {
+  background-color: #79cbd4;
+  border-color: #9bdbe2;
+}
+
+#grid div.gridColumn > div[data-active="true"]:hover {
+  background-color: #aad6da;
+}
+
+
+
+
 .GridColumn td {
   background-color: blue;
   display: block;
