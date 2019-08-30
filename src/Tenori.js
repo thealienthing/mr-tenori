@@ -19,16 +19,21 @@ class SynthTrack {
     }
 
     this.freqScale = this.midiScale.map(number => Tone.Midi(number).toFrequency());
+
+    this.addNote = this.addNote.bind(this);
+    this.removeNote = this.removeNote.bind(this);
   }
 
   addNote(beat, note) {
     this.activeFrequencies[beat].push(this.freqScale[note]);
     this.activeMidiNotes[beat].push(this.midiScale[note]);
+    //console.log(this.activeFrequencies);
   }
 
   removeNote(beat, note) {
     this.activeFrequencies[beat] = this.activeFrequencies[beat].filter(noteToRemove => noteToRemove !== this.freqScale[note]);
     this.activeMidiNotes[beat] = this.activeMidiNotes[beat].filter(noteToRemove => noteToRemove !== this.midiScale[note]);
+    //console.log(this.activeFrequencies);
   }
 
   playBoop() {
@@ -55,7 +60,13 @@ class Tenori extends Component {
         <button onClick={() => this.track.addNote(6,0) }>Add</button>
         <button onClick={() => this.track.removeNote(6,0) }>Remove</button>
         <button onClick={() => console.log(this.track.activeFrequencies[6])}>Show Notes</button>
-        <Grid id='grid' numberOfBeats={16} numberOfNotes={16} />
+        <Grid
+          id='grid'
+          numberOfBeats={16}
+          numberOfNotes={16}
+          handleAddNote={this.track.addNote}
+          handleRemoveNote={this.track.removeNote}
+        />
       </div>
     );
   }

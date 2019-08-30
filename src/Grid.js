@@ -79,11 +79,11 @@ class Grid extends React.Component {
 	}
 
 	signalNoteOn(beat, note) {
-		console.log("Note ON: beat=" + beat + ", note=" + note);
+		this.props.handleAddNote(beat, note);
 	}
 
 	signalNoteOff(beat, note) {
-		console.log("Note OFF: beat=" + beat + ", note=" + note);
+		this.props.handleRemoveNote(beat, note);
 	}
 
 	generateColumnSquares() {
