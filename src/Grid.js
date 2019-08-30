@@ -21,7 +21,7 @@ class Grid extends React.Component {
 			// true if we're adding notes while clicking, false if removing
 			adding: true
 		}
-		
+
 	}
 
 	handleMouseDown(ev) {
@@ -33,7 +33,7 @@ class Grid extends React.Component {
 		// Set state.adding to true if the user cliks on an inactive square
 		// If the user clicks on a non-square, data-active will be null, so state.adding will be set to true
 		this.freeAndIndpendentState.adding = !ev.target.getAttribute('data-active');
-		
+
 		// The mouse move handler can take it from here
 		this.handleMouseMove(ev);
 	}
@@ -104,11 +104,9 @@ class Grid extends React.Component {
 			);
 		}
 
-		console.log("GRID BE RUNDERING");
-
 		return (
-			<div 
-				id="grid" 
+			<div
+				id="grid"
 				onMouseDown={this.handleMouseDown}
 				onMouseUp={this.handleMouseUp}
 				onMouseOut={this.handleMouseOut}
@@ -121,21 +119,7 @@ class Grid extends React.Component {
 }
 
 
-// function GridColumn(props) {
-// 	let noteSquares = [];
-// 	for(let i = props.numberOfNotes-1; i >= 0; i--) {
-// 		noteSquares.push(<NoteSquare key={i} idx={i} />);
-// 	}
-
-// 	return(
-// 		<div className="gridColumn" data-columnindex={props.idx}>
-// 			{noteSquares}
-// 		</div>
-// 	);
-// }
-
 function NoteSquare(props) {
-	console.log("SQUR BE RRANDRING");
 	return <div data-noteindex={props.idx} data-active={props.active}></div>
 }
 
