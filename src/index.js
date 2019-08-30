@@ -1,18 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-//import Button from './Button';
-import Grid from './Grid.js';
-
-function AppContainer(props) {
-	return (
-		<React.Fragment>
-			<Grid id='grid' numberOfBeats={16} numberOfNotes={16} />
-		</React.Fragment>
-	);
-}
+import Tenori from './Tenori.js'
 
 ReactDOM.render(
-  <AppContainer />,
+  <Tenori />,
   document.getElementById('test')
 );
