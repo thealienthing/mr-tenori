@@ -15,6 +15,7 @@ class SynthTrack {
     this.pingPong = new Tone.PingPongDelay("4n", 0.2);
     this.chorus = new Tone.Chorus(4, 2.5, 0.5);
     this.phaser = new Tone.Phaser(0.5, 3, 1000);
+    this.filter = new Tone.Filter(200, 'lowpass');
     this.synth = new Tone.PolySynth(16, Tone.Synth);
 
     this.activeFrequencies = [];
@@ -49,6 +50,10 @@ class SynthTrack {
     }
     else if(e.id === "phaser") {
       this.phaser.frequency.value = e.value;
+    }
+    else if(e.id === "filter") {
+      this.filter.Q.value = 20; //Fix later - Q set high for easy hearing of filter sweep
+      this.filter.frequency.value = e.value;
     }
   }
 
@@ -97,7 +102,7 @@ class Tenori extends Component {
     Tone.Transport.loopEnd = this.ticksToMeasures(16);
     console.log(this.track.pingPong);
     //this.track.env.toMaster();
-    this.track.synth.chain(this.track.phaser, this.track.chorus, this.track.pingPong, Tone.Master);
+    this.track.synth.chain(this.track.filter, this.track.phaser, this.track.chorus, this.track.pingPong, Tone.Master);
   }
 
   kickItOff() {
@@ -134,6 +139,7 @@ class Tenori extends Component {
         <SynthUI passedFunction={this.track.updateSynth} min="0" max="10" label="Delay" id="delay"/>
         <SynthUI passedFunction={this.track.updateSynth} min="0" max="1.5" label="Chorus" id="chorus"/>
         <SynthUI passedFunction={this.track.updateSynth} min="0" max="5" label="Phaser" id="phaser"/>
+        <SynthUI passedFunction={this.track.updateSynth} min="0" max="10000" label="Filter" id="filter"/>
       </div>
     );
   }
