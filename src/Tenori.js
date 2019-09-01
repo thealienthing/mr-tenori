@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import Grid from './Grid.js';
+import SynthUI from './SynthUI';
 import Tone from 'tone';
 
 class SynthTrack {
   constructor(args) {
-    var pingPong = new Tone.PingPongDelay("4n", 0.2).toMaster();
-    this.synth = new Tone.PolySynth(16, Tone.Synth).connect(pingPong);
+    //var pingPong = new Tone.PingPongDelay("4n", 0.2).toMaster();
 
+    this.synth = new Tone.PolySynth(16, Tone.Synth).toMaster();
+    Object.defineProperty(this.synth, "prop", {
+      writable: true,
+    });
     this.activeFrequencies = [];
     this.activeMidiNotes = [];
     for(let i = 0; i < 16; i++){
@@ -23,6 +27,14 @@ class SynthTrack {
 
     this.addNote = this.addNote.bind(this);
     this.removeNote = this.removeNote.bind(this);
+    this.detune = this.detune.bind(this);
+    this.updateSynth = this.updateSynth.bind(this);
+  }
+
+  updateSynth(e) {
+    this.synth
+    //console.log(copy.gain);
+
   }
 
   addNote(beat, note) {
@@ -39,6 +51,11 @@ class SynthTrack {
 
   playTick(tick) {
     this.synth.triggerAttackRelease(this.activeFrequencies[tick], "16n");
+
+  }
+
+  detune() {
+    this.synth.set("detune", -500);
   }
 
   playBoop() {
@@ -91,6 +108,7 @@ class Tenori extends Component {
         <button onClick={() => this.track.removeNote(6,0) }>Remove</button>
         <button onClick={() => console.log(this.track.activeFrequencies[6])}>Show Notes</button>
         <button onClick={this.kickItOff}>GOGGOGOOGOOOGOGOOGOGOG</button>
+        <button onClick={() => this.track.detune()}>Detune</button>
         <Grid
           id='grid'
           numberOfBeats={16}
@@ -98,6 +116,7 @@ class Tenori extends Component {
           handleAddNote={this.track.addNote}
           handleRemoveNote={this.track.removeNote}
         />
+        <SynthUI passedFunction={this.track.updateSynth}/>
       </div>
     );
   }
