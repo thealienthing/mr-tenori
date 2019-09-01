@@ -5,12 +5,18 @@ import Tone from 'tone';
 
 class SynthTrack {
   constructor(args) {
-    //var pingPong = new Tone.PingPongDelay("4n", 0.2).toMaster();
-
-    this.synth = new Tone.PolySynth(16, Tone.Synth).toMaster();
-    Object.defineProperty(this.synth, "prop", {
-      writable: true,
+    this.env = new Tone.AmplitudeEnvelope({
+    	"attack" : .70,
+    	"decay" : 0.8,
+    	"sustain" : 1,
+    	"release" : 2.0,
     });
+    // this.env.connect(gainNode.gain).toMaster();
+    this.pingPong = new Tone.PingPongDelay("4n", 0.2);
+    this.chorus = new Tone.Chorus(4, 2.5, 0.5);
+    this.phaser = new Tone.Phaser(0.5, 3, 1000);
+    this.synth = new Tone.PolySynth(16, Tone.Synth);
+
     this.activeFrequencies = [];
     this.activeMidiNotes = [];
     for(let i = 0; i < 16; i++){
@@ -19,38 +25,46 @@ class SynthTrack {
     }
 
     this.midiScale = [69, 71, 73, 76, 78, 81, 83, 85, 88, 90, 93, 95, 97, 100, 102, 104];
-    // for(let i = 69; i < 85; i++){
-    //   this.midiScale.push(i);
-    // }
 
     this.freqScale = this.midiScale.map(number => Tone.Midi(number).toFrequency());
 
     this.addNote = this.addNote.bind(this);
     this.removeNote = this.removeNote.bind(this);
     this.detune = this.detune.bind(this);
+
     this.updateSynth = this.updateSynth.bind(this);
+    this.config = this.config.bind(this);
+  }
+
+  config() {
+    this.synth.connect(this.gainNode).toMaster();
   }
 
   updateSynth(e) {
-    this.synth
-    //console.log(copy.gain);
-
+    if(e.id === "delay") {
+      this.pingPong.delayTime.value = e.value;
+    }
+    else if(e.id === "chorus") {
+      this.chorus.depth = e.value;
+    }
+    else if(e.id === "phaser") {
+      this.phaser.frequency.value = e.value;
+    }
   }
 
   addNote(beat, note) {
     this.activeFrequencies[beat].push(this.freqScale[note]);
     this.activeMidiNotes[beat].push(this.midiScale[note]);
-    //console.log(this.activeFrequencies);
   }
 
   removeNote(beat, note) {
     this.activeFrequencies[beat] = this.activeFrequencies[beat].filter(noteToRemove => noteToRemove !== this.freqScale[note]);
     this.activeMidiNotes[beat] = this.activeMidiNotes[beat].filter(noteToRemove => noteToRemove !== this.midiScale[note]);
-    //console.log(this.activeFrequencies);
   }
 
   playTick(tick) {
     this.synth.triggerAttackRelease(this.activeFrequencies[tick], "16n");
+    this.env.triggerAttack("8n");
 
   }
 
@@ -81,11 +95,15 @@ class Tenori extends Component {
     Tone.Transport.loop = true;
     Tone.Transport.loopStart = this.ticksToMeasures(0);
     Tone.Transport.loopEnd = this.ticksToMeasures(16);
+    console.log(this.track.pingPong);
+    //this.track.env.toMaster();
+    this.track.synth.chain(this.track.phaser, this.track.chorus, this.track.pingPong, Tone.Master);
   }
 
   kickItOff() {
     Tone.Transport.stop();
     Tone.Transport.start("+0.1", "0:0:0");
+    //console.log(this.track.gainNode);
   }
 
   ticksToMeasures(ticks) {
@@ -104,10 +122,7 @@ class Tenori extends Component {
   render() {
     return (
       <div id="tenori">
-        <button onClick={() => this.track.addNote(6,0) }>Add</button>
-        <button onClick={() => this.track.removeNote(6,0) }>Remove</button>
-        <button onClick={() => console.log(this.track.activeFrequencies[6])}>Show Notes</button>
-        <button onClick={this.kickItOff}>GOGGOGOOGOOOGOGOOGOGOG</button>
+        <button onClick={this.kickItOff}>Start</button>
         <button onClick={() => this.track.detune()}>Detune</button>
         <Grid
           id='grid'
@@ -116,7 +131,9 @@ class Tenori extends Component {
           handleAddNote={this.track.addNote}
           handleRemoveNote={this.track.removeNote}
         />
-        <SynthUI passedFunction={this.track.updateSynth}/>
+        <SynthUI passedFunction={this.track.updateSynth} min="0" max="10" label="Delay" id="delay"/>
+        <SynthUI passedFunction={this.track.updateSynth} min="0" max="1.5" label="Chorus" id="chorus"/>
+        <SynthUI passedFunction={this.track.updateSynth} min="0" max="5" label="Phaser" id="phaser"/>
       </div>
     );
   }

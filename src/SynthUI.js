@@ -8,24 +8,22 @@ class SynthUI extends Component {
   }
 
   updateParent(e) {
-    this.props.passedFunction(e.target.value);
+    this.props.passedFunction(e.target);
   }
 
 
   render() {
     return (
       <div>
-        <input id="test"
+        <input id={this.props.id}
         type="range"
+        name="testLabel"
         onChange={this.updateParent}
-        min="0.0"
-        max="1.0"
-        step="0.01"
-        >
-        </input>
-        <label for="test">
-          Test Slider
-        </label>
+        min={this.props.min}
+        max={this.props.max}
+        step={"0.01"}
+        ></input>
+        <label for="testLabel">{this.props.label}</label>
       </div>
     );
   }
