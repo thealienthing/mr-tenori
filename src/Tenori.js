@@ -103,14 +103,12 @@ class Tenori extends Component {
     Tone.Transport.loopStart = this.ticksToMeasures(0);
     Tone.Transport.loopEnd = this.ticksToMeasures(16);
     console.log(this.track.pingPong);
-    //this.track.env.toMaster();
     this.track.synth.chain(this.track.filter, this.track.phaser, this.track.chorus, this.track.pingPong, Tone.Master);
   }
 
   kickItOff() {
     Tone.Transport.stop();
     Tone.Transport.start("+0.1", "0:0:0");
-    //console.log(this.track.gainNode);
   }
 
   ticksToMeasures(ticks) {
