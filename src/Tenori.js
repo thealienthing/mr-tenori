@@ -102,7 +102,6 @@ class Tenori extends Component {
     Tone.Transport.loop = true;
     Tone.Transport.loopStart = this.ticksToMeasures(0);
     Tone.Transport.loopEnd = this.ticksToMeasures(16);
-    console.log(this.track.pingPong);
     this.track.synth.chain(this.track.filter, this.track.phaser, this.track.chorus, this.track.pingPong, Tone.Master);
   }
 
@@ -135,9 +134,9 @@ class Tenori extends Component {
           handleAddNote={this.track.addNote}
           handleRemoveNote={this.track.removeNote}
         />
-        <SynthUI passedFunction={this.track.updateSynth} min="0" max="10" label="Delay" id="delay"/>
-        <SynthUI passedFunction={this.track.updateSynth} min="0" max="1.5" label="Chorus" id="chorus"/>
-        <SynthUI passedFunction={this.track.updateSynth} min="0" max="5" label="Phaser" id="phaser"/>
+        <SynthUI passedFunction={this.track.updateSynth} min="0" max="10"    label="Delay"  id="delay" />
+        <SynthUI passedFunction={this.track.updateSynth} min="0" max="1.5"   label="Chorus" id="chorus"/>
+        <SynthUI passedFunction={this.track.updateSynth} min="0" max="5"     label="Phaser" id="phaser"/>
         <SynthUI passedFunction={this.track.updateSynth} min="0" max="10000" label="Filter" id="filter"/>
       </div>
     );

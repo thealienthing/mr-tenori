@@ -23,7 +23,7 @@ class SynthUI extends Component {
         max={this.props.max}
         step={"0.01"}
         ></input>
-        <label for="testLabel">{this.props.label}</label>
+        <label htmlFor={this.props.id}> {this.props.label} </label>
       </div>
     );
   }
