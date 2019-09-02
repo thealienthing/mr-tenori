@@ -92,7 +92,6 @@ class Tenori extends Component {
         <button onClick={() => console.log(this.track.activeFrequencies[6])}>Show Notes</button>
         <button onClick={this.kickItOff}>GOGGOGOOGOOOGOGOOGOGOG</button>
         <Grid
-          id='grid'
           numberOfBeats={16}
           numberOfNotes={16}
           handleAddNote={this.track.addNote}
