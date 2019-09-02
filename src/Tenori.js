@@ -11,13 +11,16 @@ class SynthTrack {
     	"sustain" : 1,
     	"release" : 2.0,
     });
-    // this.env.connect(gainNode.gain).toMaster();
+
+
+    //Initialize the track fx here. Not safe to connect until track is initialized
     this.pingPong = new Tone.PingPongDelay("4n", 0.2);
     this.chorus = new Tone.Chorus(4, 2.5, 0.5);
     this.phaser = new Tone.Phaser(0.5, 3, 1000);
     this.filter = new Tone.Filter(200, 'lowpass');
     this.synth = new Tone.PolySynth(16, Tone.Synth);
 
+    //Here is where the active notes live that the synth is playing
     this.activeFrequencies = [];
     this.activeMidiNotes = [];
     for(let i = 0; i < 16; i++){
@@ -25,20 +28,20 @@ class SynthTrack {
       this.activeMidiNotes.push([]);
     }
 
+    //Here is the current limited midi scale. This needs to be expanded for other scales
     this.midiScale = [69, 71, 73, 76, 78, 81, 83, 85, 88, 90, 93, 95, 97, 100, 102, 104];
-
     this.freqScale = this.midiScale.map(number => Tone.Midi(number).toFrequency());
 
+    //Bind functions here:
     this.addNote = this.addNote.bind(this);
     this.removeNote = this.removeNote.bind(this);
-    this.detune = this.detune.bind(this);
-
-    this.updateSynth = this.updateSynth.bind(this);
-    this.config = this.config.bind(this);
+    this.detune = this.detune.bind(this); //Needs to be adjusted
+    this.updateSynth = this.updateSynth.bind(this); //For updating settings to fx
+    this.config = this.config.bind(this); //Fix
   }
 
   config() {
-    this.synth.connect(this.gainNode).toMaster();
+    //Nothing here yet. Probably remove if not used in future
   }
 
   updateSynth(e) {
@@ -73,7 +76,7 @@ class SynthTrack {
 
   }
 
-  detune() {
+  detune() { //definitely change this so that you can detune multiple times by half steps
     this.synth.set("detune", -500);
   }
 
@@ -87,7 +90,6 @@ class Tenori extends Component {
     super(props)
     this.useSynth = this.useSynth.bind(this);
     this.track = new SynthTrack();
-
     this.setupTransport();
   }
 
