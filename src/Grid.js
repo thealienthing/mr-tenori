@@ -1,5 +1,19 @@
 import React from 'react'
 
+/*
+ * Grid
+ *	This Component implements the UI for the clickable grid. This guy should be the
+ * 	fella in charge of detecting user interaction. 
+ * 	
+ *
+ * Expected props:
+ *	- numberOfColumns: Integer, number of columns
+ *	- numberOfRows: Integer, number of rows (i.e. click)
+ *	- handleAddNote: function(columnIndex, rowIndex), function to be called to add a
+ *		note for the given column/row position.
+ *	- handleRemoveNote: function(columnIndex, rowIndex), same deal, but to remove a note.
+ *
+ */
 class Grid extends React.Component {
 	constructor(props) {
 		super(props);
@@ -32,7 +46,7 @@ class Grid extends React.Component {
 		// Set state.adding to false if the user clicks on an active square
 		// Set state.adding to true if the user cliks on an inactive square
 		// If the user clicks on a non-square, data-active will be null, so state.adding will be set to true
-		this.freeAndIndpendentState.adding = !ev.target.getAttribute('data-active');
+		this.freeAndIndpendentState.adding = ev.target.getAttribute('data-active') !== "true";
 
 		// The mouse move handler can take it from here
 		this.handleMouseMove(ev);
@@ -52,6 +66,11 @@ class Grid extends React.Component {
 		}
 	}
 
+	eventKiller(ev) {
+		// console.log(ev.type);
+		ev.preventDefault();
+	}
+
 	handleMouseMove(ev) {
 		// this.state.clicking indicates user is pressing down. If they're not, we don't give a shoot
 		if(!this.freeAndIndpendentState.clicking) return;
@@ -62,9 +81,7 @@ class Grid extends React.Component {
 
 		// Get column index and isActive
 		let col = ev.target.parentNode.getAttribute('data-columnindex');
-		let active = ev.target.getAttribute('data-active');
-		// Returns as a string
-		if(active === "false") active = false;
+		let active = ev.target.getAttribute('data-active') === "true";
 
 		// Adding state: Add square if it's not already active
 		if(this.freeAndIndpendentState.adding && !active) {
@@ -88,7 +105,7 @@ class Grid extends React.Component {
 
 	generateColumnSquares() {
 		let noteSquares = [];
-		for(let i = this.props.numberOfNotes-1; i >= 0; i--) {
+		for(let i = this.props.numberOfRows-1; i >= 0; i--) {
 			noteSquares.push(<NoteSquare key={i} idx={i} />);
 		}
 		return noteSquares;
@@ -96,7 +113,7 @@ class Grid extends React.Component {
 
 	render() {
 		let columns = [];
-		for(let i = 0; i < this.props.numberOfBeats; i++) {
+		for(let i = 0; i < this.props.numberOfColumns; i++) {
 			columns.push(
 				<div key={i} className="gridColumn" data-columnindex={i}>
 					{this.generateColumnSquares()}
@@ -111,6 +128,8 @@ class Grid extends React.Component {
 				onMouseUp={this.handleMouseUp}
 				onMouseOut={this.handleMouseOut}
 				onMouseMove={this.handleMouseMove}
+				onDragStart={this.eventKiller}
+				onDrop={this.eventKiller}
 			>
 				{columns}
 			</div>

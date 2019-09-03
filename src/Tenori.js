@@ -130,9 +130,8 @@ class Tenori extends Component {
         <button onClick={this.kickItOff}>Start</button>
         <button onClick={() => this.track.detune()}>Detune</button>
         <Grid
-          id='grid'
-          numberOfBeats={16}
-          numberOfNotes={16}
+          numberOfColumns={16}
+          numberOfRows={16}
           handleAddNote={this.track.addNote}
           handleRemoveNote={this.track.removeNote}
         />
