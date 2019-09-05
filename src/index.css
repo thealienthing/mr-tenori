@@ -1,6 +1,16 @@
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
+  /* This kills pull down to refresh for the entire page */
+  /*overscroll-behavior:none;*/
+}
+
+#grid,
+#grid div.gridColumn,
+#grid div.gridColumn > div {
+  /* This makes touch events stay within the grid */
+  /* So that prevent pull down reload, and scrolling the page if you're zoomed in */
+  touch-action:none;
 }
 
 #grid {

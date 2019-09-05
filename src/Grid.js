@@ -23,6 +23,8 @@ class Grid extends React.Component {
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.handleMouseUp = this.handleMouseUp.bind(this);
 		this.handleMouseOut = this.handleMouseOut.bind(this);
+		this.handleTouchStart = this.handleTouchStart.bind(this);
+		this.handleTouchMove = this.handleTouchMove.bind(this);
 
 		// Using this.state (as in React Component state) will trigger a rerender
 		//  when the state changes. We need to track some state independently of that,
@@ -35,8 +37,12 @@ class Grid extends React.Component {
 			// true if we're adding notes while clicking, false if removing
 			adding: true
 		}
-
 	}
+
+
+	//
+	//	Mouse/touch event handlers
+	//
 
 	handleMouseDown(ev) {
 		// User is clicking down! Set state.clicking.
@@ -55,6 +61,7 @@ class Grid extends React.Component {
 	handleMouseUp(ev) {
 		// Reset state.clicking
 		this.freeAndIndpendentState.clicking = false;
+		ev.preventDefault();
 	}
 
 	handleMouseOut(ev) {
@@ -66,31 +73,66 @@ class Grid extends React.Component {
 		}
 	}
 
+	handleMouseMove(ev) {
+		// this.state.clicking indicates user is pressing down. If they're not, we don't give a shoot
+		if(!this.freeAndIndpendentState.clicking) return;
+
+		this.dealWithSquareEvent(ev.target);
+	}
+
+	handleTouchStart(ev) {
+		ev.preventDefault();
+		// Only support single touches for now
+		if(ev.touches.length !== 1) return;
+		// Set state.adding; assume we're just using the first touch.
+		this.freeAndIndpendentState.adding = ev.targetTouches[0].target.getAttribute('data-active') !== "true";
+		// Helper function can take it from here, thanks
+		this.dealWithSquareEvent(ev.targetTouches[0].target);
+	}	
+
+	handleTouchMove(ev) {
+		ev.preventDefault();
+
+		// Only support single touches for now
+		if(ev.touches.length !== 1){
+			return;
+		}
+
+		// Find the element the user is actually touching by using the X/Y value of the touch
+		// Because the event target for touchMove events is always the element you touched first
+		this.dealWithSquareEvent(
+			document.elementFromPoint(
+				ev.targetTouches[0].pageX, ev.targetTouches[0].pageY));
+	}
+
 	eventKiller(ev) {
 		// console.log(ev.type);
 		ev.preventDefault();
 	}
 
-	handleMouseMove(ev) {
-		// this.state.clicking indicates user is pressing down. If they're not, we don't give a shoot
-		if(!this.freeAndIndpendentState.clicking) return;
 
+
+	//
+	//	Everything else
+	//
+
+	dealWithSquareEvent(domNode) {
 		// Get note index; bail if null (because it means user is not clicking on a square)
-		let note = ev.target.getAttribute('data-noteindex');
+		let note = domNode.getAttribute('data-noteindex');
 		if(note === null) return;
 
 		// Get column index and isActive
-		let col = ev.target.parentNode.getAttribute('data-columnindex');
-		let active = ev.target.getAttribute('data-active') === "true";
+		let col = domNode.parentNode.getAttribute('data-columnindex');
+		let active = domNode.getAttribute('data-active') === "true";
 
 		// Adding state: Add square if it's not already active
 		if(this.freeAndIndpendentState.adding && !active) {
-			ev.target.setAttribute('data-active', true);
+			domNode.setAttribute('data-active', true);
 			this.signalNoteOn(col, note);
 		}
 		// Not adding state: Remove square if it's active
 		else if(!this.freeAndIndpendentState.adding && active) {
-			ev.target.setAttribute('data-active', false);
+			domNode.setAttribute('data-active', false);
 			this.signalNoteOff(col, note);
 		}
 	}
@@ -122,6 +164,7 @@ class Grid extends React.Component {
 		}
 
 		return (
+			<div>
 			<div
 				id="grid"
 				onMouseDown={this.handleMouseDown}
@@ -130,8 +173,17 @@ class Grid extends React.Component {
 				onMouseMove={this.handleMouseMove}
 				onDragStart={this.eventKiller}
 				onDrop={this.eventKiller}
+				onTouchStart={this.handleTouchStart}
+				onTouchMove={this.handleTouchMove}
+				onTouchEnd={this.eventKiller}
+				onTouchCancel={this.eventKiller}
 			>
 				{columns}
+			</div>
+			<textarea 
+				id="pseudoconsole" 
+				style={{width:"600px", height:"900px", display:"block", marginTop:"10px"}}>
+			</textarea>
 			</div>
 		);
 	}
