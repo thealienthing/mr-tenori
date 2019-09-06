@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Grid from './Grid.js';
-import SynthUI from './SynthUI';
+import {SliderComponent, ButtonComponent} from './InputComponent';
 import Tone from 'tone';
 
 class SynthTrack {
@@ -11,7 +11,6 @@ class SynthTrack {
     	"sustain" : 1,
     	"release" : 2.0,
     });
-
 
     //Initialize the track fx here. Not safe to connect until track is initialized
     this.pingPong = new Tone.PingPongDelay("4n", 0.2);
@@ -37,26 +36,24 @@ class SynthTrack {
     this.removeNote = this.removeNote.bind(this);
     this.detune = this.detune.bind(this); //Needs to be adjusted
     this.updateSynth = this.updateSynth.bind(this); //For updating settings to fx
-    this.config = this.config.bind(this); //Fix
+    this.setup = this.setup.bind(this);
   }
 
-  config() {
-    //Nothing here yet. Probably remove if not used in future
-  }
 
-  updateSynth(e) {
-    if(e.id === "delay") {
-      this.pingPong.delayTime.value = e.value;
+
+  updateSynth(element) {
+    if(element.id === "delay") {
+      this.pingPong.delayTime.value = element.value;
     }
-    else if(e.id === "chorus") {
-      this.chorus.depth = e.value;
+    else if(element.id === "chorus") {
+      this.chorus.depth = element.value;
     }
-    else if(e.id === "phaser") {
-      this.phaser.frequency.value = e.value;
+    else if(element.id === "phaser") {
+      this.phaser.frequency.value = element.value;
     }
-    else if(e.id === "filter") {
-      this.filter.Q.value = 20; //Fix later - Q set high for easy hearing of filter sweep
-      this.filter.frequency.value = e.value;
+    else if(element.id === "filter") {
+      this.filter.Q.value = 3; //Fix later - Q set high for easy hearing of filter sweep
+      this.filter.frequency.value = element.value;
     }
   }
 
@@ -72,28 +69,33 @@ class SynthTrack {
 
   playTick(tick) {
     this.synth.triggerAttackRelease(this.activeFrequencies[tick], "16n");
-    this.env.triggerAttack("8n");
-
+    //Consider this! Check to see if track is muted or not; if it is, just return
   }
 
   detune() { //definitely change this so that you can detune multiple times by half steps
     this.synth.set("detune", -500);
   }
 
-  playBoop() {
-    this.synth.triggerAttackRelease('C4', '8n');
+  setup() {
+    this.synth.chain(this.filter, this.phaser, this.chorus, this.pingPong, Tone.Master);
   }
 }
 
 class Tenori extends Component {
   constructor(props) {
     super(props)
-    this.useSynth = this.useSynth.bind(this);
     this.track = new SynthTrack();
-    this.setupTransport();
+    this.setup();
+
+    this.globalSettings = {
+      bpm: 120,
+      numberOfTicks: 16,
+    }
+
+    this.updateGlobalSettings = this.updateGlobalSettings.bind(this);
   }
 
-  setupTransport() {
+  setup() {
     let numberOfBeats = 16;
     for(let i = 0; i < numberOfBeats; i++) {
       Tone.Transport.schedule((time) => { this.track.playTick(i); }, this.ticksToMeasures(i));
@@ -102,12 +104,14 @@ class Tenori extends Component {
     Tone.Transport.loop = true;
     Tone.Transport.loopStart = this.ticksToMeasures(0);
     Tone.Transport.loopEnd = this.ticksToMeasures(16);
-    this.track.synth.chain(this.track.filter, this.track.phaser, this.track.chorus, this.track.pingPong, Tone.Master);
+    this.track.setup();
   }
 
-  kickItOff() {
-    Tone.Transport.stop();
-    Tone.Transport.start("+0.1", "0:0:0");
+  updateGlobalSettings(element) {
+    if(element.id === 'bpm'){
+      this.globalSettings.bpm = element.value;
+      Tone.Transport.bpm.value = this.globalSettings.bpm;
+    }
   }
 
   ticksToMeasures(ticks) {
@@ -117,27 +121,22 @@ class Tenori extends Component {
     return measures + ":" + beats + ":" + sixteenths;
   }
 
-  useSynth(){
-    console.log(this.track.activeFrequencies);
-    this.track.addNote(3, 4);
-    console.log(this.track.activeFrequencies);
-  }
-
   render() {
     return (
       <div id="tenori">
-        <button onClick={this.kickItOff}>Start</button>
-        <button onClick={() => this.track.detune()}>Detune</button>
         <Grid
           numberOfColumns={16}
           numberOfRows={16}
           handleAddNote={this.track.addNote}
           handleRemoveNote={this.track.removeNote}
         />
-        <SynthUI passedFunction={this.track.updateSynth} min="0" max="10"    label="Delay"  id="delay" />
-        <SynthUI passedFunction={this.track.updateSynth} min="0" max="1.5"   label="Chorus" id="chorus"/>
-        <SynthUI passedFunction={this.track.updateSynth} min="0" max="5"     label="Phaser" id="phaser"/>
-        <SynthUI passedFunction={this.track.updateSynth} min="0" max="10000" label="Filter" id="filter"/>
+        <SliderComponent passedFunction={this.track.updateSynth} min="0" max="10"    label="Delay"  id="delay" />
+        <SliderComponent passedFunction={this.track.updateSynth} min="0" max="1.5"   label="Chorus" id="chorus"/>
+        <SliderComponent passedFunction={this.track.updateSynth} min="0" max="5"     label="Phaser" id="phaser"/>
+        <SliderComponent passedFunction={this.track.updateSynth} min="0" max="10000" label="Filter" id="filter"/>
+        <SliderComponent passedFunction={this.updateGlobalSettings} min="30" max="300" label="BPM" id="bpm"/>
+        <ButtonComponent passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
+        <ButtonComponent passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
       </div>
     );
   }
