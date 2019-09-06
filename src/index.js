@@ -5,5 +5,5 @@ import Tenori from './Tenori.js'
 
 ReactDOM.render(
   <Tenori />,
-  document.getElementById('test')
+  document.getElementById('app')
 );

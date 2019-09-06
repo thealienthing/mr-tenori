@@ -1,8 +1,79 @@
+html, body {
+  margin:0;
+  padding:0;
+}
+
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
+  background-color: #222;
   /* This kills pull down to refresh for the entire page */
   /*overscroll-behavior:none;*/
+}
+
+header {
+  width: 960px;
+  margin: auto;
+  height: 64px;
+  padding: 10px;
+}
+
+header a {
+  float:right;
+}
+
+header a img {
+  width: 40px;
+  height: 40px;
+}
+
+.appBody {
+  width: 960px;
+  margin: auto;
+  padding-top:50px;
+}
+
+.temporaryStuffHolder {
+  width: 480px;
+  margin:auto;
+}
+
+.globalControls,
+.synthUiControls {
+  display:inline-block;
+  color:#eee;
+}
+
+.globalControls {
+  float:right;
+  text-align:right;
+}
+
+.sliderContainer {
+  margin-bottom:5px;
+}
+
+.powerbutton {
+  padding: 10px 15px;
+  border: 0;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: 700;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.btnGreen {
+  background-color: #74ca49;
+}
+
+.btnRed {
+  background-color: #ca4949;
+}
+
+.maximumHeader {
+  color: #eee;
+  text-align: center;
+  font-size: 51px;
 }
 
 #grid,
@@ -14,9 +85,11 @@ body {
 }
 
 #grid {
-  background: #333;
+  background: #222;
   padding: 10px;
-  display: inline-block;
+  /* display: inline-block; */
+  margin:auto;
+  width:480px;
 }
 
 #grid div.gridColumn {

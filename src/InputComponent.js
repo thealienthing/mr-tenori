@@ -13,7 +13,7 @@ class SliderComponent extends Component {
 
   render() {
     return (
-      <div>
+      <div className="sliderContainer">
         <input id={this.props.id}
         type="range"
         name={this.props.id}
@@ -36,15 +36,14 @@ class ButtonComponent extends Component {
 
   render() {
     return (
-      <div>
         <button
+        className={this.props.className}
         id={this.props.id}
         name={this.props.id}
         onClick={this.props.passedFunction}
         >
-        {this.props.label}
+          {this.props.label}
         </button>
-      </div>
     );
   }
 }
