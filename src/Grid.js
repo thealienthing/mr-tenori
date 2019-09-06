@@ -3,8 +3,8 @@ import React from 'react'
 /*
  * Grid
  *	This Component implements the UI for the clickable grid. This guy should be the
- * 	fella in charge of detecting user interaction. 
- * 	
+ * 	fella in charge of detecting user interaction.
+ *
  *
  * Expected props:
  *	- numberOfColumns: Integer, number of columns
