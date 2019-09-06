@@ -29,10 +29,15 @@ class SliderComponent extends Component {
 }
 
 class ButtonComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.updateParent = this.updateParent.bind(this);
+  }
 
-  // updateParent(e) {
-  //   this.props.passedFunction(e.target);
-  // }
+  updateParent(e) {
+	  console.log("boop");
+    this.props.passedFunction(e.target);
+  }
 
   render() {
     return (
@@ -40,9 +45,9 @@ class ButtonComponent extends Component {
         className={this.props.className}
         id={this.props.id}
         name={this.props.id}
-        onClick={this.props.passedFunction}
+        onClick={this.updateParent}
         >
-          {this.props.label}
+        {this.props.label}
         </button>
     );
   }
