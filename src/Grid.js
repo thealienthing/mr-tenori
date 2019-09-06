@@ -88,7 +88,7 @@ class Grid extends React.Component {
 		this.freeAndIndpendentState.adding = ev.targetTouches[0].target.getAttribute('data-active') !== "true";
 		// Helper function can take it from here, thanks
 		this.dealWithSquareEvent(ev.targetTouches[0].target);
-	}	
+	}
 
 	handleTouchMove(ev) {
 		ev.preventDefault();
@@ -165,25 +165,21 @@ class Grid extends React.Component {
 
 		return (
 			<div>
-			<div
-				id="grid"
-				onMouseDown={this.handleMouseDown}
-				onMouseUp={this.handleMouseUp}
-				onMouseOut={this.handleMouseOut}
-				onMouseMove={this.handleMouseMove}
-				onDragStart={this.eventKiller}
-				onDrop={this.eventKiller}
-				onTouchStart={this.handleTouchStart}
-				onTouchMove={this.handleTouchMove}
-				onTouchEnd={this.eventKiller}
-				onTouchCancel={this.eventKiller}
-			>
-				{columns}
-			</div>
-			<textarea 
-				id="pseudoconsole" 
-				style={{width:"600px", height:"900px", display:"block", marginTop:"10px"}}>
-			</textarea>
+				<div
+					id="grid"
+					onMouseDown={this.handleMouseDown}
+					onMouseUp={this.handleMouseUp}
+					onMouseOut={this.handleMouseOut}
+					onMouseMove={this.handleMouseMove}
+					onDragStart={this.eventKiller}
+					onDrop={this.eventKiller}
+					onTouchStart={this.handleTouchStart}
+					onTouchMove={this.handleTouchMove}
+					onTouchEnd={this.eventKiller}
+					onTouchCancel={this.eventKiller}
+				>
+					{columns}
+				</div>
 			</div>
 		);
 	}
