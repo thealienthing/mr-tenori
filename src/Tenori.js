@@ -11,6 +11,8 @@ class SynthTrack {
     	"sustain" : 1,
     	"release" : 2.0,
     });
+    this.transpose = 0;
+    this.volume = -6;
 
     //Initialize the track fx here. Not safe to connect until track is initialized
     this.pingPong = new Tone.PingPongDelay("4n", 0.2);
@@ -18,6 +20,7 @@ class SynthTrack {
     this.phaser = new Tone.Phaser(0.5, 3, 1000);
     this.filter = new Tone.Filter(200, 'lowpass');
     this.synth = new Tone.PolySynth(16, Tone.Synth);
+    this.synth.volume.value = this.volume;
 
     //Here is where the active notes live that the synth is playing
     this.activeFrequencies = [];
@@ -54,6 +57,18 @@ class SynthTrack {
     else if(element.id === "filter") {
       this.filter.Q.value = 3; //Fix later - Q set high for easy hearing of filter sweep
       this.filter.frequency.value = element.value;
+    }
+    else if(element.id === "detuneDown") {
+      this.transpose -= 1;
+      this.synth.set("detune", (this.transpose * 100));
+    }
+    else if(element.id === "detuneUp") {
+      this.transpose += 1;
+      this.synth.set("detune", (this.transpose * 100));
+    }
+    else if(element.id === "volume") {
+      this.volume = element.value;
+      this.synth.volume.value = this.volume;
     }
   }
 
@@ -143,7 +158,10 @@ class Tenori extends Component {
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="1.5"   label="Chorus" id="chorus"/>
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="5"     label="Phaser" id="phaser"/>
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
-            </div>
+	      <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
+	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneUp" label="Detune Up"/>
+	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneDown" label="Detune Down"/>
+	                  </div>
             <div className="globalControls">
               <SliderComponent passedFunction={this.updateGlobalSettings} step="1" min="30" max="300" label="BPM" id="bpm"/>
               <ButtonComponent className="powerbutton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
