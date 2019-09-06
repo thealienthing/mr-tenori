@@ -139,13 +139,13 @@ class Tenori extends Component {
           />
           <div className="temporaryStuffHolder">
             <div className="synthUiControls">
-              <SliderComponent passedFunction={this.track.updateSynth} min="0" max="10"    label="Delay"  id="delay" />
-              <SliderComponent passedFunction={this.track.updateSynth} min="0" max="1.5"   label="Chorus" id="chorus"/>
-              <SliderComponent passedFunction={this.track.updateSynth} min="0" max="5"     label="Phaser" id="phaser"/>
-              <SliderComponent passedFunction={this.track.updateSynth} min="0" max="10000" label="Filter" id="filter"/>
+              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="10"    label="Delay"  id="delay" />
+              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="1.5"   label="Chorus" id="chorus"/>
+              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="5"     label="Phaser" id="phaser"/>
+              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
             </div>
             <div className="globalControls">
-              <SliderComponent passedFunction={this.updateGlobalSettings} min="30" max="300" label="BPM" id="bpm"/>
+              <SliderComponent passedFunction={this.updateGlobalSettings} step="1" min="30" max="300" label="BPM" id="bpm"/>
               <ButtonComponent className="powerbutton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
               <ButtonComponent className="powerbutton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
             </div>
