@@ -31,8 +31,14 @@ class SynthTrack {
     }
 
     //Here is the current limited midi scale. This needs to be expanded for other scales
-    this.midiScale = [69, 71, 73, 76, 78, 81, 83, 85, 88, 90, 93, 95, 97, 100, 102, 104];
-    this.freqScale = this.midiScale.map(number => Tone.Midi(number).toFrequency());
+    this.scaleOptions = {
+      "pentatonicMajor": [69, 71, 73, 76, 81, 83, 85, 88, 90, 93, 95, 97, 100, 102, 104],
+      "pentatonicMinor": [69, 72, 74, 76, 79, 81, 84, 86, 88, 91, 93, 96, 98, 100, 103 ],
+      "diatonic":        [69, 71, 73, 74, 76, 78, 100, 101, 103, 105, 106, 108, 110, 112, 113],
+    }
+
+    this.currentMidiScale = this.scaleOptions.pentatonicMinor;
+    this.currentFreqScale = this.currentMidiScale.map(number => Tone.Midi(number).toFrequency());
 
     //Bind functions here:
     this.addNote = this.addNote.bind(this);
@@ -73,13 +79,17 @@ class SynthTrack {
   }
 
   addNote(beat, note) {
-    this.activeFrequencies[beat].push(this.freqScale[note]);
-    this.activeMidiNotes[beat].push(this.midiScale[note]);
+    this.activeFrequencies[beat].push(this.currentFreqScale[note]);
+    this.activeMidiNotes[beat].push(this.currentMidiScale[note]);
   }
 
   removeNote(beat, note) {
-    this.activeFrequencies[beat] = this.activeFrequencies[beat].filter(noteToRemove => noteToRemove !== this.freqScale[note]);
-    this.activeMidiNotes[beat] = this.activeMidiNotes[beat].filter(noteToRemove => noteToRemove !== this.midiScale[note]);
+    this.activeFrequencies[beat] = this.activeFrequencies[beat].filter(noteToRemove => noteToRemove !== this.currentFreqScale[note]);
+    this.activeMidiNotes[beat] = this.activeMidiNotes[beat].filter(noteToRemove => noteToRemove !== this.currentMidiScale[note]);
+  }
+
+  changeScale() {
+    
   }
 
   playTick(tick) {
