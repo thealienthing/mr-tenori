@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import Grid from './Grid.js';
-import {SliderComponent, ButtonComponent} from './InputComponent';
+import {SliderComponent, ButtonComponent, DropDownComponent} from './InputComponent';
 import Tone from 'tone';
 
 class SynthTrack {
   constructor(args) {
-    this.env = new Tone.AmplitudeEnvelope({
-    	"attack" : .70,
-    	"decay" : 0.8,
-    	"sustain" : 1,
-    	"release" : 2.0,
-    });
     this.transpose = 0;
     this.volume = -6;
 
@@ -22,23 +16,28 @@ class SynthTrack {
     this.synth = new Tone.PolySynth(16, Tone.Synth);
     this.synth.volume.value = this.volume;
 
+    //Here is the current limited midi scale. This needs to be expanded for other scales
+    this.scaleOptions = {
+      pentatonicMajor: [69, 71, 73, 76, 81, 83, 85, 88, 90, 93, 95, 97, 100, 102, 104],
+      pentatonicMinor: [69, 72, 74, 76, 79, 81, 84, 86, 88, 91, 93, 96, 98, 100, 103 ],
+      diatonicMajor:   [69, 71, 73, 74, 76, 78, 80, 81, 83, 85, 86, 88, 90, 92, 93],
+      naturalMinor:    [69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86, 88, 89, 91, 93],
+    }
+
     //Here is where the active notes live that the synth is playing
-    this.activeFrequencies = [];
-    this.activeMidiNotes = [];
+    this.activeFrequencies = []; //Tone.js likes to work with frequencies, not midi numbers; For playback purposes
+    this.activeMidiNotes = [];   //We want to eventually export the midi, so we will hold on to the notes
+    this.activeNoteSquares = []; //We need to know which note boxes are selected so we can quickly change them when we need to
+    this.midiTable = [];         //
+    this.frequencyTable = [];    //
+
     for(let i = 0; i < 16; i++){
       this.activeFrequencies.push([]);
       this.activeMidiNotes.push([]);
+      this.activeNoteSquares.push([]);
     }
 
-    //Here is the current limited midi scale. This needs to be expanded for other scales
-    this.scaleOptions = {
-      "pentatonicMajor": [69, 71, 73, 76, 81, 83, 85, 88, 90, 93, 95, 97, 100, 102, 104],
-      "pentatonicMinor": [69, 72, 74, 76, 79, 81, 84, 86, 88, 91, 93, 96, 98, 100, 103 ],
-      "diatonic":        [69, 71, 73, 74, 76, 78, 100, 101, 103, 105, 106, 108, 110, 112, 113],
-    }
-
-    this.currentMidiScale = this.scaleOptions.pentatonicMinor;
-    this.currentFreqScale = this.currentMidiScale.map(number => Tone.Midi(number).toFrequency());
+    this.setScale("pentatonicMajor");
 
     //Bind functions here:
     this.addNote = this.addNote.bind(this);
@@ -46,11 +45,29 @@ class SynthTrack {
     this.detune = this.detune.bind(this); //Needs to be adjusted
     this.updateSynth = this.updateSynth.bind(this); //For updating settings to fx
     this.setup = this.setup.bind(this);
+    this.setScale = this.setScale.bind(this);
+  }
+
+  setScale(scale) {
+    let newScale = this.scaleOptions[scale];
+    if(newScale === undefined) {
+      newScale = this.scaleOptions.pentatonicMajor;
+    }
+
+    this.midiTable = newScale;
+    this.frequencyTable = this.midiTable.map(number => Tone.Midi(number).toFrequency());
+
+    let self = this;
+    this.activeNoteSquares.forEach(function(activeNotes, beatIndex) {
+      self.activeMidiNotes[beatIndex] = activeNotes.map((note) => self.midiTable[note]);
+      self.activeFrequencies[beatIndex] = activeNotes.map((note) => self.frequencyTable[note]);
+    });
   }
 
 
 
   updateSynth(element) {
+    //Ugly wall of if statements. Convert to switch later
     if(element.id === "delay") {
       this.pingPong.delayTime.value = element.value;
     }
@@ -79,18 +96,18 @@ class SynthTrack {
   }
 
   addNote(beat, note) {
-    this.activeFrequencies[beat].push(this.currentFreqScale[note]);
-    this.activeMidiNotes[beat].push(this.currentMidiScale[note]);
+    this.activeNoteSquares[beat].push(note);
+    this.activeFrequencies[beat].push(this.frequencyTable[note]);
+    this.activeMidiNotes[beat].push(this.midiTable[note]);
   }
 
   removeNote(beat, note) {
-    this.activeFrequencies[beat] = this.activeFrequencies[beat].filter(noteToRemove => noteToRemove !== this.currentFreqScale[note]);
-    this.activeMidiNotes[beat] = this.activeMidiNotes[beat].filter(noteToRemove => noteToRemove !== this.currentMidiScale[note]);
+    this.activeNoteSquares[beat] = this.activeNoteSquares[beat].filter(noteToRemove => noteToRemove !== note);
+    this.activeFrequencies[beat] = this.activeFrequencies[beat].filter(noteToRemove => noteToRemove !== this.frequencyTable[note]);
+    this.activeMidiNotes[beat] = this.activeMidiNotes[beat].filter(noteToRemove => noteToRemove !== this.midiTable[note]);
   }
 
-  changeScale() {
-    
-  }
+
 
   playTick(tick) {
     this.synth.triggerAttackRelease(this.activeFrequencies[tick], "16n");
@@ -151,7 +168,7 @@ class Tenori extends Component {
       <div id="tenori">
         <header>
           <a href="https://github.com/thealienthing/tenori-on">
-            <img src="GitHub-Mark-Light-64px.png" />
+            <img src="GitHub-Mark-Light-64px.png" alt="GitHub-Mark-Light-64px.png"/>
           </a>
         </header>
         <section className="appBody">
@@ -174,6 +191,7 @@ class Tenori extends Component {
 	                  </div>
             <div className="globalControls">
               <SliderComponent passedFunction={this.updateGlobalSettings} step="1" min="30" max="300" label="BPM" id="bpm"/>
+              <DropDownComponent passedFunction={this.track.setScale} options={["pentatonicMajor", "pentatonicMinor", "diatonicMajor", "naturalMinor"]} />
               <ButtonComponent className="powerbutton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
               <ButtonComponent className="powerbutton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
             </div>
