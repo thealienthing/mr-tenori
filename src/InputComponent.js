@@ -63,9 +63,13 @@ class DropDownComponent extends Component {
   }
 
   render() {
+    console.log(this.props.options);
     let options = [];
-    for(let i = 0; i<this.props.options.length; i++) {
-      options.push(<option key={i} value={this.props.options[i]}>{this.props.options[i]}</option>);
+    // for(let i = 0; i<this.props.options.length; i++) {
+    //   options.push(<option key={i} value={this.props.options[i]}>{this.props.options[i]}</option>);
+    // }
+    for(let opt in this.props.options) {
+      options.push(<option key={this.props.options[opt]} value={this.props.options[opt]}>{opt}</option>);
     }
     return (
       <select
