@@ -26,7 +26,7 @@ class SynthTrack {
     }
 
     this.rootNoteOptions = {
-      a: 69, c: 72, d: 74, g: 79,
+      "A4": 69, "C4": 72, "D4": 74, "G4": 79,
     }
 
     //Here is where the active notes live that the synth is playing
@@ -131,7 +131,7 @@ class SynthTrack {
     console.log(this.activeFrequencies[tick]);
     //Consider this! Check to see if track is muted or not; if it is, just return
   }
-  
+
   setup() {
     this.synth.chain(this.filter, this.phaser, this.chorus, this.pingPong, Tone.Master);
   }
@@ -186,7 +186,7 @@ class Tenori extends Component {
           </a>
         </header>
         <section className="appBody">
-          <h1 className="maximumHeader">M R .&nbsp;&nbsp;&nbsp;T E N O R I</h1>
+          <h1 className="maximumHeader">MR. TENORI</h1>
           <Grid
             numberOfColumns={16}
             numberOfRows={16}
@@ -203,10 +203,14 @@ class Tenori extends Component {
             </div>
             <div className="globalControls">
               <SliderComponent passedFunction={this.updateGlobalSettings} step="1" min="30" max="300" label="BPM" id="bpm"/>
-              <DropDownComponent passedFunction={this.track.setScale} options={{"Pentatonic Major": "pentatonicMajor", "Pentatonic Minor": "pentatonicMinor"}} />
-              <DropDownComponent passedFunction={this.track.setRootNote} options={this.track.rootNoteOptions} />
-              <ButtonComponent className="powerbutton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
-              <ButtonComponent className="powerbutton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
+              <div className="dropdownHolderman">
+                <DropDownComponent passedFunction={this.track.setScale} options={{"Pentatonic Major": "pentatonicMajor", "Pentatonic Minor": "pentatonicMinor"}} />
+                <DropDownComponent passedFunction={this.track.setRootNote} options={this.track.rootNoteOptions} />
+              </div>
+              <div>
+                <ButtonComponent className="powerbutton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
+                <ButtonComponent className="powerbutton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
+              </div>
             </div>
           </div>
         </section>
