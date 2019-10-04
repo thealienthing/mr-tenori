@@ -35,7 +35,6 @@ class ButtonComponent extends Component {
   }
 
   updateParent(e) {
-	  console.log("boop");
     this.props.passedFunction(e.target);
   }
 
@@ -53,7 +52,40 @@ class ButtonComponent extends Component {
   }
 }
 
+class DropDownComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.updateParent = this.updateParent.bind(this);
+  }
+
+  updateParent(e) {
+    this.props.passedFunction(e.target.value);
+  }
+
+  render() {
+    console.log(this.props.options);
+    let options = [];
+    // for(let i = 0; i<this.props.options.length; i++) {
+    //   options.push(<option key={i} value={this.props.options[i]}>{this.props.options[i]}</option>);
+    // }
+    for(let opt in this.props.options) {
+      options.push(<option key={this.props.options[opt]} value={this.props.options[opt]}>{opt}</option>);
+    }
+    return (
+      <select
+        className={this.props.className}
+        id={this.props.id}
+        name={this.props.id}
+        onChange={this.updateParent}
+      >
+        {options}
+      </select>
+    )
+  }
+}
+
 export {
   SliderComponent,
   ButtonComponent,
+  DropDownComponent
 }
