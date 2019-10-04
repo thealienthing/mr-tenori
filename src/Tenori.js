@@ -5,7 +5,8 @@ import Tone from 'tone';
 
 class SynthTrack {
   constructor(args) {
-    this.transpose = 0;
+    this.rootNote = 69;
+    this.scaleName = "pentatonicMajor";
     this.volume = -6;
 
     //Initialize the track fx here. Not safe to connect until track is initialized
@@ -18,10 +19,14 @@ class SynthTrack {
 
     //Here is the current limited midi scale. This needs to be expanded for other scales
     this.scaleOptions = {
-      pentatonicMajor: [69, 71, 73, 76, 81, 83, 85, 88, 90, 93, 95, 97, 100, 102, 104],
-      pentatonicMinor: [69, 72, 74, 76, 79, 81, 84, 86, 88, 91, 93, 96, 98, 100, 103 ],
-      diatonicMajor:   [69, 71, 73, 74, 76, 78, 80, 81, 83, 85, 86, 88, 90, 92, 93],
-      naturalMinor:    [69, 71, 72, 74, 76, 77, 79, 81, 83, 84, 86, 88, 89, 91, 93],
+      pentatonicMajor: [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28, 31, 33, 36],
+      pentatonicMinor: [0, 3, 5, 7, 10,12, 15, 17, 19, 22, 24, 27, 29, 31, 34, 36],
+      //diatonicMajor:   [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28, 31, 33, 36],
+      //naturalMinor:    [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28, 31, 33, 36],
+    }
+
+    this.rootNoteOptions = {
+      a: 69, c: 72, d: 74, g: 79,
     }
 
     //Here is where the active notes live that the synth is playing
@@ -37,7 +42,7 @@ class SynthTrack {
       this.activeNoteSquares.push([]);
     }
 
-    this.setScale("pentatonicMajor");
+    this.setScale();
 
     //Bind functions here:
     this.addNote = this.addNote.bind(this);
@@ -46,13 +51,22 @@ class SynthTrack {
     this.updateSynth = this.updateSynth.bind(this); //For updating settings to fx
     this.setup = this.setup.bind(this);
     this.setScale = this.setScale.bind(this);
+    this.setRootNote = this.setRootNote.bind(this);
   }
 
   setScale(scale) {
-    let newScale = this.scaleOptions[scale];
-    if(newScale === undefined) {
-      newScale = this.scaleOptions.pentatonicMajor;
+    if(scale in this.scaleOptions){
+      this.scaleName = scale;
     }
+    else {
+      this.scaleName = "pentatonicMajor";
+    }
+    this.updateScale();
+  }
+
+  updateScale() {
+    let newScale = this.scaleOptions[this.scaleName];
+    newScale = newScale.map((note) => note + this.rootNote);
 
     this.midiTable = newScale;
     this.frequencyTable = this.midiTable.map(number => Tone.Midi(number).toFrequency());
@@ -62,6 +76,20 @@ class SynthTrack {
       self.activeMidiNotes[beatIndex] = activeNotes.map((note) => self.midiTable[note]);
       self.activeFrequencies[beatIndex] = activeNotes.map((note) => self.frequencyTable[note]);
     });
+  }
+
+  setRootNote(rootNote) {
+    let parsed = parseInt(rootNote, 10);
+    if(isNaN(parsed)) {
+      console.log("WHY IS THIS HAPPENING");
+      return;
+    }
+    if(parsed < 0 || parsed > 91){
+      console.log("THATS OUT OF RANGE, MAN");
+      return;
+    }
+    this.rootNote = parsed;
+    this.updateScale();
   }
 
 
@@ -82,12 +110,12 @@ class SynthTrack {
       this.filter.frequency.value = element.value;
     }
     else if(element.id === "detuneDown") {
-      this.transpose -= 1;
-      this.synth.set("detune", (this.transpose * 100));
+      this.rootNote -= 1;
+      this.synth.set("detune", (this.rootNote * 100));
     }
     else if(element.id === "detuneUp") {
-      this.transpose += 1;
-      this.synth.set("detune", (this.transpose * 100));
+      this.rootNote += 1;
+      this.synth.set("detune", (this.rootNote * 100));
     }
     else if(element.id === "volume") {
       this.volume = element.value;
@@ -111,6 +139,7 @@ class SynthTrack {
 
   playTick(tick) {
     this.synth.triggerAttackRelease(this.activeFrequencies[tick], "16n");
+    console.log(this.activeFrequencies[tick]);
     //Consider this! Check to see if track is muted or not; if it is, just return
   }
 
@@ -185,13 +214,14 @@ class Tenori extends Component {
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="1.5"   label="Chorus" id="chorus"/>
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="5"     label="Phaser" id="phaser"/>
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
-	      <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
-	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneUp" label="Detune Up"/>
-	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneDown" label="Detune Down"/>
-	                  </div>
+      	      <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
+      	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneUp" label="Detune Up"/>
+      	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneDown" label="Detune Down"/>
+            </div>
             <div className="globalControls">
               <SliderComponent passedFunction={this.updateGlobalSettings} step="1" min="30" max="300" label="BPM" id="bpm"/>
-              <DropDownComponent passedFunction={this.track.setScale} options={["pentatonicMajor", "pentatonicMinor", "diatonicMajor", "naturalMinor"]} />
+              <DropDownComponent passedFunction={this.track.setScale} options={{"Pentatonic Major": "pentatonicMajor", "Pentatonic Minor": "pentatonicMinor"}} />
+              <DropDownComponent passedFunction={this.track.setRootNote} options={this.track.rootNoteOptions} />
               <ButtonComponent className="powerbutton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
               <ButtonComponent className="powerbutton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
             </div>
