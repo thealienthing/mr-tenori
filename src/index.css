@@ -74,6 +74,12 @@ header a img {
   color: #eee;
   text-align: center;
   font-size: 51px;
+  letter-spacing: 0.3em;
+  padding-left: 0.3em;
+}
+
+.dropdownHolderman {
+  margin-bottom:8px;
 }
 
 #grid,
