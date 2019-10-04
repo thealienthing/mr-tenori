@@ -47,7 +47,6 @@ class SynthTrack {
     //Bind functions here:
     this.addNote = this.addNote.bind(this);
     this.removeNote = this.removeNote.bind(this);
-    this.detune = this.detune.bind(this); //Needs to be adjusted
     this.updateSynth = this.updateSynth.bind(this); //For updating settings to fx
     this.setup = this.setup.bind(this);
     this.setScale = this.setScale.bind(this);
@@ -109,14 +108,6 @@ class SynthTrack {
       this.filter.Q.value = 3; //Fix later - Q set high for easy hearing of filter sweep
       this.filter.frequency.value = element.value;
     }
-    else if(element.id === "detuneDown") {
-      this.rootNote -= 1;
-      this.synth.set("detune", (this.rootNote * 100));
-    }
-    else if(element.id === "detuneUp") {
-      this.rootNote += 1;
-      this.synth.set("detune", (this.rootNote * 100));
-    }
     else if(element.id === "volume") {
       this.volume = element.value;
       this.synth.volume.value = this.volume;
@@ -135,18 +126,12 @@ class SynthTrack {
     this.activeMidiNotes[beat] = this.activeMidiNotes[beat].filter(noteToRemove => noteToRemove !== this.midiTable[note]);
   }
 
-
-
   playTick(tick) {
     this.synth.triggerAttackRelease(this.activeFrequencies[tick], "16n");
     console.log(this.activeFrequencies[tick]);
     //Consider this! Check to see if track is muted or not; if it is, just return
   }
-
-  detune() { //definitely change this so that you can detune multiple times by half steps
-    this.synth.set("detune", -500);
-  }
-
+  
   setup() {
     this.synth.chain(this.filter, this.phaser, this.chorus, this.pingPong, Tone.Master);
   }
@@ -215,8 +200,6 @@ class Tenori extends Component {
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="5"     label="Phaser" id="phaser"/>
               <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
       	      <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
-      	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneUp" label="Detune Up"/>
-      	      <ButtonComponent passedFunction={this.track.updateSynth} id="detuneDown" label="Detune Down"/>
             </div>
             <div className="globalControls">
               <SliderComponent passedFunction={this.updateGlobalSettings} step="1" min="30" max="300" label="BPM" id="bpm"/>
