@@ -5,9 +5,15 @@ class SliderComponent extends Component {
   constructor(props) {
     super(props);
     this.updateParent = this.updateParent.bind(this);
+    this.state = {
+      value: this.props.value,
+    }
   }
 
   updateParent(e) {
+    this.setState({
+      value: e.target.value,
+    })
     this.props.passedFunction(e.target);
   }
 
@@ -21,6 +27,7 @@ class SliderComponent extends Component {
         min={this.props.min}
         max={this.props.max}
         step={this.props.step}
+        value={this.state.value}
         ></input>
         <label htmlFor={this.props.id}> {this.props.label} </label>
       </div>

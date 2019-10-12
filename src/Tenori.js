@@ -9,13 +9,22 @@ class SynthTrack {
     this.scaleName = "pentatonicMajor";
     this.volume = -6;
 
+    this.synthSettings = {
+      delayTime: 2,
+      chorusDepth: .5,
+      phaserFreqency: 0.2,
+      filterCutoff: 5000,
+    }
+
     //Initialize the track fx here. Not safe to connect until track is initialized
-    this.pingPong = new Tone.PingPongDelay("4n", 0.2);
-    this.chorus = new Tone.Chorus(4, 2.5, 0.5);
-    this.phaser = new Tone.Phaser(0.5, 3, 1000);
-    this.filter = new Tone.Filter(200, 'lowpass');
+    this.pingPong = new Tone.PingPongDelay(this.synthSettings.delayTime, 0.2);
+    this.chorus = new Tone.Chorus(1.5, 2.5, this.synthSettings.chorusDepth);
+    this.phaser = new Tone.Phaser(this.synthSettings.phaserFreqency, 1, 1000);
+    this.filter = new Tone.Filter(this.synthSettings.filterCutoff, 'lowpass');
     this.synth = new Tone.PolySynth(16, Tone.Synth);
     this.synth.volume.value = this.volume;
+
+
 
     //Here is the current limited midi scale. This needs to be expanded for other scales
     this.scaleOptions = {
@@ -96,16 +105,20 @@ class SynthTrack {
   updateSynth(element) {
     //Ugly wall of if statements. Convert to switch later
     if(element.id === "delay") {
-      this.pingPong.delayTime.value = element.value;
+      this.synthSettings.delayTime = element.value;
+      this.pingPong.delayTime.value = this.synthSettings.delayTime;
     }
     else if(element.id === "chorus") {
+      this.synthSettings.chorusDepth = element.value;
       this.chorus.depth = element.value;
     }
     else if(element.id === "phaser") {
+      this.synthSettings.phaserFreqency = element.value;
       this.phaser.frequency.value = element.value;
     }
     else if(element.id === "filter") {
       this.filter.Q.value = 3; //Fix later - Q set high for easy hearing of filter sweep
+      this.synthSettings.filterCutoff = element.value;
       this.filter.frequency.value = element.value;
     }
     else if(element.id === "volume") {
@@ -195,10 +208,10 @@ class Tenori extends Component {
           />
           <div className="temporaryStuffHolder">
             <div className="synthUiControls">
-              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="10"    label="Delay"  id="delay" />
-              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="1.5"   label="Chorus" id="chorus"/>
-              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="5"     label="Phaser" id="phaser"/>
-              <SliderComponent passedFunction={this.track.updateSynth} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.delayTime} step="0.01" min="0" max="10"    label="Delay"  id="delay" />
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.chorusDepth} step="0.01" min="0" max="1.0"   label="Chorus" id="chorus"/>
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.phaserFreqency} step="0.01" min="0" max="30"     label="Phaser" id="phaser"/>
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.filterCutoff} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
       	      <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
             </div>
             <div className="globalControls">
