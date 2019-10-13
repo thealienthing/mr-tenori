@@ -209,24 +209,32 @@ class Tenori extends Component {
           />
 
           <div className="controlsContainer">
-            <div className="synthUiControls">
-              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.delayTime} step="0.01" min="0" max="10"    label="Delay"  id="delay" />
-              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.chorusDepth} step="0.01" min="0" max="1.0"   label="Chorus" id="chorus"/>
-              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.phaserFreqency} step="0.01" min="0" max="30"     label="Phaser" id="phaser"/>
-              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.filterCutoff} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
-      	      <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
+            <div className="controlsRow">
+              <div>
+                <ButtonComponent className="turboButton btnBlue" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start" icon="play"/>
+                <ButtonComponent className="turboButton btnOrange" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop" icon="stop"/>
+              </div>
+              <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
             </div>
-            <div className="globalControls">
-              <SliderComponent passedFunction={this.updateGlobalSettings} step="1" min="30" max="300" label="BPM" id="bpm"/>
-              <div className="dropdownHolderman">
+
+            <div className="controlsRow">
+              <div>
                 <DropDownComponent passedFunction={this.track.setScale} options={{"Pentatonic Major": "pentatonicMajor", "Pentatonic Minor": "pentatonicMinor"}} />
                 <DropDownComponent passedFunction={this.track.setRootNote} options={this.track.rootNoteOptions} />
               </div>
-              <div>
-                <ButtonComponent className="turboButton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
-                <ButtonComponent className="turboButton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
-              </div>
+              <SliderComponent passedFunction={this.updateGlobalSettings} value={this.globalSettings.bpm} step="1" min="30" max="300" label="BPM" id="bpm"/>
             </div>
+
+            <div className="controlsRow">
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.delayTime} step="0.01" min="0" max="10"    label="Delay"  id="delay" />
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.chorusDepth} step="0.01" min="0" max="1.0"   label="Chorus" id="chorus"/>
+            </div>
+
+            <div className="controlsRow">
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.phaserFreqency} step="0.01" min="0" max="30"     label="Phaser" id="phaser"/>
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.filterCutoff} step="0.01" min="0" max="10000" label="Filter" id="filter"/>
+            </div>
+
           </div>
         </section>
       </div>
