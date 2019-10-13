@@ -1,3 +1,8 @@
+
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ *  General stuff
+ * * * * * * * * * * * * * * * * * * * * * * * */
+
 html, body {
   margin:0;
   padding:0;
@@ -9,6 +14,20 @@ body {
   /* This kills pull down to refresh for the entire page */
   /*overscroll-behavior:none;*/
 }
+
+.incrediblyPotentHeaderText {
+  color: #eee;
+  text-align: center;
+  font-size: 51px;
+  letter-spacing: 0.3em;
+  padding-left: 0.3em;
+}
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ *  Site header
+ * * * * * * * * * * * * * * * * * * * * * * * */
 
 header {
   width: 960px;
@@ -26,61 +45,21 @@ header a img {
   height: 40px;
 }
 
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ *  Main application 
+ * * * * * * * * * * * * * * * * * * * * * * * */
+
 .appBody {
   width: 960px;
   margin: auto;
   padding-top:50px;
 }
 
-.temporaryStuffHolder {
-  width: 480px;
-  margin:auto;
-}
 
-.globalControls,
-.synthUiControls {
-  display:inline-block;
-  color:#eee;
-}
-
-.globalControls {
-  float:right;
-  text-align:right;
-}
-
-.sliderContainer {
-  margin-bottom:5px;
-}
-
-.powerbutton {
-  padding: 10px 15px;
-  border: 0;
-  font-size: 14px;
-  border-radius: 5px;
-  font-weight: 700;
-  margin: 5px;
-  cursor: pointer;
-}
-
-.btnGreen {
-  background-color: #74ca49;
-}
-
-.btnRed {
-  background-color: #ca4949;
-}
-
-.maximumHeader {
-  color: #eee;
-  text-align: center;
-  font-size: 51px;
-  letter-spacing: 0.3em;
-  padding-left: 0.3em;
-}
-
-.dropdownHolderman {
-  margin-bottom:8px;
-}
+/* * *  Game grid  * * */
 
 #grid,
 #grid div.gridColumn,
@@ -126,86 +105,61 @@ header a img {
 }
 
 
+/* * *  Controls stuff  * * */
 
-
-.GridColumn td {
-  background-color: blue;
-  display: block;
-  margin-bottom: 5px;
-  width: 10px;
-  height: 30px;
+.controlsContainer {
+  width: 480px;
+  margin:auto;
 }
 
-.Grid .GridColumn {
-  display: inline-block;
-  height: 40px;
-  width: 40px;
+.globalControls,
+.synthUiControls {
+  display:inline-block;
+  color:#eee;
 }
 
-ol, ul {
-  padding-left: 30px;
+.globalControls {
+  float:right;
+  text-align:right;
 }
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+.dropdownHolderman {
+  margin-bottom:8px;
 }
 
-.status {
-  margin-bottom: 10px;
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ *  Input components and buttons
+ * * * * * * * * * * * * * * * * * * * * * * * */
+
+.turboButton {
+  padding: 10px 15px;
+  border: 0;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: 700;
+  margin: 5px;
+  cursor: pointer;
 }
 
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
+.btnGreen {
+  background-color: #74ca49;
 }
 
-.square:focus {
-  outline: none;
+.btnRed {
+  background-color: #ca4949;
 }
 
-.kbd-navigation .square:focus {
-  background: #ddd;
+
+/* * *  Slider (input range) components  * * */
+
+.sliderContainer {
+  margin-bottom:5px;
 }
 
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
-}
-
-.hey {
-  width: 100px;
-  height: 100px;
-  border-radius: 10px;
-  border: 5px solid #e99fd6;
-  box-shadow: 3px 5px 8px 0px #555;
-  margin: 20px;
-  background-size: contain;
-  background-image:url('heman.jpg');
-}
-
-.hey:hover {
-    margin: 21px 19px 19px 21px;
-    border-color: #ec87d2;
-    cursor: pointer;
-    box-shadow: 2px 3px 7px 0px #555;
-}
-
+/* The following was generated using http://danielstern.ca/range.css/#/ */
+/* Great site, wow */
 input[type=range] {
   -webkit-appearance: none;
   width: 100%;
@@ -291,3 +245,92 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
   background: #4e4e4d;
 }
+
+
+
+
+
+
+/*
+
+.GridColumn td {
+  background-color: blue;
+  display: block;
+  margin-bottom: 5px;
+  width: 10px;
+  height: 30px;
+}
+
+.Grid .GridColumn {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+}
+
+ol, ul {
+  padding-left: 30px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+.hey {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  border: 5px solid #e99fd6;
+  box-shadow: 3px 5px 8px 0px #555;
+  margin: 20px;
+  background-size: contain;
+  background-image:url('heman.jpg');
+}
+
+.hey:hover {
+    margin: 21px 19px 19px 21px;
+    border-color: #ec87d2;
+    cursor: pointer;
+    box-shadow: 2px 3px 7px 0px #555;
+}
+
+*/
+
+

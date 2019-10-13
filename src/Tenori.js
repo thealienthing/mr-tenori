@@ -198,15 +198,17 @@ class Tenori extends Component {
             <img src="GitHub-Mark-Light-64px.png" alt="GitHub-Mark-Light-64px.png"/>
           </a>
         </header>
+
         <section className="appBody">
-          <h1 className="maximumHeader">MR. TENORI</h1>
+          <h1 className="incrediblyPotentHeaderText">MR. TENORI</h1>
           <Grid
             numberOfColumns={16}
             numberOfRows={16}
             handleAddNote={this.track.addNote}
             handleRemoveNote={this.track.removeNote}
           />
-          <div className="temporaryStuffHolder">
+
+          <div className="controlsContainer">
             <div className="synthUiControls">
               <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.delayTime} step="0.01" min="0" max="10"    label="Delay"  id="delay" />
               <SliderComponent passedFunction={this.track.updateSynth} value={this.track.synthSettings.chorusDepth} step="0.01" min="0" max="1.0"   label="Chorus" id="chorus"/>
@@ -221,8 +223,8 @@ class Tenori extends Component {
                 <DropDownComponent passedFunction={this.track.setRootNote} options={this.track.rootNoteOptions} />
               </div>
               <div>
-                <ButtonComponent className="powerbutton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
-                <ButtonComponent className="powerbutton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
+                <ButtonComponent className="turboButton btnGreen" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start"/>
+                <ButtonComponent className="turboButton btnRed" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop"/>
               </div>
             </div>
           </div>
