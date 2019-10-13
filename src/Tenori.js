@@ -214,7 +214,7 @@ class Tenori extends Component {
                 <ButtonComponent className="turboButton btnBlue" passedFunction={() => {Tone.Transport.start("+0.1", "0:0:0")}} id="start" label="Start" icon="play"/>
                 <ButtonComponent className="turboButton btnOrange" passedFunction={() => {Tone.Transport.stop()}} id="stop" label="Stop" icon="stop"/>
               </div>
-              <SliderComponent passedFunction={this.track.updateSynth} step="1" min="-48" max="0"      label="Volume" id="volume"/>
+              <SliderComponent passedFunction={this.track.updateSynth} value={this.track.volume} step="1" min="-48" max="0" label="Volume" id="volume"/>
             </div>
 
             <div className="controlsRow">

@@ -9,10 +9,13 @@ html, body {
 }
 
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
   background-color: #222;
   /* This kills pull down to refresh for the entire page */
   /*overscroll-behavior:none;*/
+}
+
+html,body,h1,h2,h3,h4,h5,h6,p,input,select,textarea,button {
+  font-family: "Century Gothic", Futura, sans-serif;
 }
 
 .incrediblyPotentHeaderText {
@@ -156,6 +159,14 @@ header a img {
 
 .btnOrange {
   background-color: #c17628;
+}
+
+select {
+  outline: none;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #d7dde6;
+  margin: 5px;
 }
 
 
