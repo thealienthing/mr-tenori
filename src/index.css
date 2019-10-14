@@ -178,13 +178,17 @@ select {
 
 .sliderContainer > label {
   margin-right:5px;
+  vertical-align: middle;
 }
 
 .sliderContainer > input[type="range"] {
   width:140px;
+  vertical-align: middle;
 }
 
 /* The following was originally generated using http://danielstern.ca/range.css/#/ */
+/* The CSS apparently can't stack like you'd want because of the different browser targets. */
+/* So lots of unfortunate copypasta in here */
 input[type=range] {
   -webkit-appearance: none;
   /*width: 100%;*/
@@ -194,170 +198,104 @@ input[type=range] {
 input[type=range]:focus {
   outline: none;
 }
+
+/* Style for the horizontal bar */
+/* Chrome */
 input[type=range]::-webkit-slider-runnable-track {
-/*input[type=range]::-moz-range-track {*/
-  /*width: 100%;
-  height: 11.2px;
-  cursor: pointer;
-  box-shadow: 2.5px 2.5px 2.5px #ae7aad, 0px 0px 2.5px #b88ab7;
-  background: #373736;
-  border-radius: 6px;
-  border: 0.5px solid #460201;*/
-
   width: 100%;
-    height: 9px;
-    cursor: pointer;
-    
-    background: #444444;
-    border-radius: 6px;
-    border: 0.5px solid #434a50;
+  height: 9px;
+  cursor: pointer;
+  background: #444444;
+  border-radius: 6px;
+  border: 0.5px solid #434a50;
 }
-input[type=range]:focus::-webkit-slider-runnable-track {
-/*input[type=range]:focus::-moz-range-track {*/
-  background: #4e4e4d;
-  /*box-shadow: 1.5px 1.5px 3.5px #4c5969, -1px -1px 3.5px #9a7171;*/
-}
-/*input[type=range]::-ms-thumb,
-input[type=range]::-moz-range-thumb,*/
-input[type=range]::-webkit-slider-thumb {
-  /*box-shadow: 0px 0px 10px rgba(200, 200, 239, 0.61), 0px 0px 0px rgba(220, 220, 245, 0.61);
-  border: 1.7px solid rgba(125, 124, 206, 0.47);
-  height: 41px;
-  width: 9px;
-  border-radius: 5px;
-  background: #d8d7de;
-  cursor: pointer;*/
-
-  /*box-shadow: 0px 0px 6px rgba(200, 200, 239, 0.61);*/
-    border: 1.7px solid #8c99bf;
-    height: 30px;
-    width: 9px;
-    border-radius: 5px;
-    background: #c1c7d8;
-    cursor: pointer;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  margin-top: -10px;
-}
-input[type=range]:focus::-webkit-slider-thumb {
-  box-shadow: 0px 0px 6px rgba(200, 200, 239, 0.61);
+/* Firefox */
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 9px;
+  cursor: pointer;
+  background: #444444;
+  border-radius: 6px;
+  border: 0.5px solid #434a50;
 }
 input[type=range]::-ms-track {
   width: 100%;
-  height: 11.2px;
+  height: 9px;
   cursor: pointer;
   background: transparent;
   border-color: transparent;
   color: transparent;
 }
-input[type=range]::-ms-fill-lower {
-  background: #20201f;
-  border: 0.5px solid #460201;
-  border-radius: 12px;
-  box-shadow: 2.5px 2.5px 2.5px #ae7aad, 0px 0px 2.5px #b88ab7;
-}
+input[type=range]::-ms-fill-lower,
 input[type=range]::-ms-fill-upper {
-  background: #373736;
-  border: 0.5px solid #460201;
+  background: #444444;
+  border: 0.5px solid #434a50;
   border-radius: 12px;
-  box-shadow: 2.5px 2.5px 2.5px #ae7aad, 0px 0px 2.5px #b88ab7;
 }
+
+/* Focus specific stuff for the horizontal bar */
+/* Chrome */
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #525663;
+  /*box-shadow: 1.5px 1.5px 3.5px #4c5969, -1px -1px 3.5px #9a7171;*/
+}
+/* Firefox */
+input[type=range]:focus::-moz-range-track {
+  background: #525663;
+}
+
+/* Style for the grabby tab */
+/* Chrome */
+input[type=range]::-webkit-slider-thumb {
+  border: 1.7px solid #8c99bf;
+  height: 30px;
+  width: 9px;
+  border-radius: 5px;
+  background: #c1c7d8;
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  margin-top: -10px;
+}
+/* Firefox */
+input[type=range]::-moz-range-thumb {
+  border: 2px solid #8c99bf;
+  height: 30px;
+  width: 9px;
+  border-radius: 5px;
+  background: #c1c7d8;
+  cursor: pointer;
+}
+/* MS Edge */
 input[type=range]::-ms-thumb {
-  height: 11.2px;
+  border: 1.7px solid #8c99bf;
+  height: 17px;
+  width: 9px;
+  border-radius: 5px;
+  background: #c1c7d8;
+  cursor: pointer;
+
+  margin-top: 0px;
 }
-input[type=range]:focus::-ms-fill-lower {
+
+/* Focus specific stuff for the grabby tab */
+/* Chrome */
+input[type=range]:focus::-webkit-slider-thumb {
+  box-shadow: 0px 0px 6px rgba(200, 200, 239, 0.61);
+}
+/* Firefox */
+input[type=range]:focus::-moz-range-thumb {
+  box-shadow: 0px 0px 6px rgba(200, 200, 239, 0.61);
+}
+
+
+/*input[type=range]::-ms-thumb {
+  height: 11.2px;
+}*/
+/*input[type=range]:focus::-ms-fill-lower {
   background: #373736;
 }
 input[type=range]:focus::-ms-fill-upper {
   background: #4e4e4d;
-}
-
-
-
-
-
-
-/*
-
-.GridColumn td {
-  background-color: blue;
-  display: block;
-  margin-bottom: 5px;
-  width: 10px;
-  height: 30px;
-}
-
-.Grid .GridColumn {
-  display: inline-block;
-  height: 40px;
-  width: 40px;
-}
-
-ol, ul {
-  padding-left: 30px;
-}
-
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
-
-.status {
-  margin-bottom: 10px;
-}
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
-}
-
-.square:focus {
-  outline: none;
-}
-
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
-}
-
-.hey {
-  width: 100px;
-  height: 100px;
-  border-radius: 10px;
-  border: 5px solid #e99fd6;
-  box-shadow: 3px 5px 8px 0px #555;
-  margin: 20px;
-  background-size: contain;
-  background-image:url('heman.jpg');
-}
-
-.hey:hover {
-    margin: 21px 19px 19px 21px;
-    border-color: #ec87d2;
-    cursor: pointer;
-    box-shadow: 2px 3px 7px 0px #555;
-}
-
-*/
-
+}*/
 
