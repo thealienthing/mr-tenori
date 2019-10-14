@@ -1,5 +1,4 @@
 var MidiWriter = require('midi-writer-js');
-const fs = require('fs');
 var track = new MidiWriter.Track();
 
 track.addEvent([
@@ -14,5 +13,22 @@ track.addEvent([
 
 var write = new MidiWriter.Writer(track);
 
-write.saveMIDI('test2')
+//write.saveMIDI('test2')
+var data = write.dataUri();
 console.log(write.dataUri());
+
+function srcToFile(src, fileName, mimeType){
+    return (fetch(src)
+        .then(function(res){return res.arrayBuffer();})
+        .then(function(buf){return new File([buf], fileName, {type:mimeType});})
+    );
+}
+
+srcToFile(
+    data,
+    'hello.mid',
+    'audio/midi'
+)
+.then(function(file){
+    console.log(file);
+})
